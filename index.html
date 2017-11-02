@@ -1,0 +1,103 @@
+<!--
+	Bryan Dingman
+	Lab 6
+	Make a game using jQuery (And other stuffs)
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>SNEK</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!-- BootStrap && jQuery -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+		<!-- Custom Javascript -->
+		<script src="javascript.js"></script>
+
+		<!-- Custom CSS/LESS -->
+	    <link rel="stylesheet/less" type="text/css" href="styles.less" />
+
+	    <!-- Less compiler -->
+		<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.7.2/less.min.js"></script>
+	</head>
+	<body>
+		<!-- The top info -->
+		<div class="container-fluid">
+			<div class="row">
+				<!-- Controls -->
+				<div class="col-md-3">				
+					<h3>Controls</h3>
+					<table class="table table-condensed">
+					    <tbody>
+					        <tr>
+					            <td>Move Snek:</td>
+					            <td>ARROW KEYS</td>
+					        </tr>
+					        <tr>
+					            <td>Pause:</td>
+					            <td>SPACE</td>
+					        </tr>
+					        <tr>
+					        	<td>Restart Game:</td>
+					        	<td>ESCAPE</td>
+					        </tr>
+					        <tr>
+					        	<td>Start Game:</td>
+					        	<td>ENTER</td>
+					        </tr>
+					    </tbody>
+					</table>	
+				</div>
+				<!-- Controls -->
+
+				<!-- Title -->
+				<div class="col-md-6 text-center"><h1>Welcome to SNEK</h1><h5>By Bryan Dingman</h5></div>
+				<!-- Title -->
+
+				<!-- Settings -->
+				<div class="col-md-3">
+					<h3>Settings</h3>
+					<table class="table table-condensed">
+					    <tbody>
+					        <tr>
+					            <td>Difficulty Preset:</td>
+					            <td>
+					            	<select id="difficulty_preset">
+					            	  <option value="easy">Easy</option>
+					            	  <option value="medium">Medium</option>
+					            	  <option value="hard">Hard</option>
+					            	  <option value="custom">Custom</option>
+					            	</select>
+					            </td>
+					        </tr>
+					        <tr>
+					        	<td>Starting Body Length:</td>
+					        	<td>
+					        		<form>
+					        			<input type="text" id="length">
+					        		</form>
+					        	</td>
+					        </tr>
+					        <tr>
+					        	<td>Delay (ms):</td>
+					        	<td>
+					        		<form>
+					        			<input type="text" id="speed">
+					        		</form>
+					        	</td>
+					        </tr>
+					    </tbody>
+					</table>					
+				</div>
+				<!-- Settings -->
+			</div>
+		</div>
+		<!-- The top info -->
+		<br> <!-- Yes, it's important, shifts the canvas down -->
+	</body>
+</html>
