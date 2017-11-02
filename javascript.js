@@ -16,6 +16,11 @@ const KEY_UP = 38;
 const KEY_RIGHT = 39;
 const KEY_DOWN = 40;
 
+// Colors
+const SNEK_HEAD = "#006700";
+const SNEK_BODY = "#00ff00";
+const SNEK_FUD = "#ff0000";
+
 // Settings
 const EASY_LENGTH = 1;
 const MEDIUM_LENGTH = 5;
@@ -37,7 +42,7 @@ var gameStarted = false;
 var settings = {};
 var paused = false;
 var score = 0;
-var mainLoop;
+var mainLoop, start_time, end_time;
 
 
 ///////////////////////////////////////////////////////
@@ -142,12 +147,12 @@ var snek =
 	create: function()
 	{
 		// Create the snek head
-		snek.head = new component(PIECE_W, PIECE_H, "#00b300", gameArea.canvasW / 2, gameArea.canvasH / 2);
+		snek.head = new component(PIECE_W, PIECE_H, SNEK_HEAD, gameArea.canvasW / 2, gameArea.canvasH / 2);
 
 		// create the body pieces
 		for (var i = 0; i < settings.start_length; i++) 
 		{
-			snek.body.push(new component(PIECE_W, PIECE_H, "#00ff00", snek.head.obj_x - (STEP * i), snek.head.obj_y));
+			snek.body.push(new component(PIECE_W, PIECE_H, SNEK_BODY, snek.head.obj_x - (STEP * i), snek.head.obj_y));
 		}
 	},
 	
@@ -193,7 +198,7 @@ var snek =
 		snek.body.unshift(snek.head);
 
 		// Create a new head
-		snek.head = new component(PIECE_W, PIECE_H, "#00b300", x, y);
+		snek.head = new component(PIECE_W, PIECE_H, SNEK_HEAD, x, y);
 
 		// Remove the last body piece
 		snek.body.pop();
@@ -202,7 +207,7 @@ var snek =
 		for (var i = 0; i < snek.body.length; i++) 
 		{
 			var bodyPiece = snek.body[i];
-			var newBodyPiece = new component(PIECE_W, PIECE_H, "#00ff00", bodyPiece.obj_x, bodyPiece.obj_y);
+			var newBodyPiece = new component(PIECE_W, PIECE_H, SNEK_BODY, bodyPiece.obj_x, bodyPiece.obj_y);
 		}
 	},
 	
@@ -214,7 +219,7 @@ var snek =
 		// we have one, just recreate it
 		if (snek.fud != null)
 		{
-			snek.fud = new component(PIECE_W, PIECE_H, "#ff0000", snek.fud.obj_x, snek.fud.obj_y);
+			snek.fud = new component(PIECE_W, PIECE_H, SNEK_FUD, snek.fud.obj_x, snek.fud.obj_y);
 		}
 		else
 		{
@@ -236,7 +241,7 @@ var snek =
 				y = PIECE_W * 3;
 
 			// create the fud piece
-			snek.fud = new component(PIECE_W, PIECE_H, "#ff0000", x, y);
+			snek.fud = new component(PIECE_W, PIECE_H, SNEK_FUD, x, y);
 		}
 	},
 
@@ -384,8 +389,8 @@ function startGame()
 		case "medium":
 		case "hard":
 			settings = {
-				start_length: $("#length").val(),
-				speed: $("#speed").val()
+				start_length: parseInt($("#length").val()),
+				speed: parseInt($("#speed").val())
 			};
 			break;
 		// Custom, we need to check some stuff
@@ -421,6 +426,7 @@ function startGame()
 	// Remember that we have started
 	gameStarted = true;
 	gameArea.clear();
+	start_time = new Date().getTime();
 	
 	// Create the snek and spawn the fud
 	snek.setup();
@@ -455,6 +461,7 @@ function gameOver()
 {
 	clearInterval(mainLoop);
 	gameArea.clear();
+	end_time = new Date().getTime() - start_time;
 
 	// Display the total points
 	var context = gameArea.context;
@@ -462,7 +469,10 @@ function gameOver()
 	context.fillStyle = "#00ff00";
 	context.textAlign = "center";
 	context.fillText("GAME OVER", gameArea.canvasW / 2, gameArea.canvasH / 2);
+	context.font = "15px Consolas";
 	context.fillText("Score: " + score, gameArea.canvasW / 2, gameArea.canvasH / 2 + 30);
+	context.fillText("Time: " + millisToMinutesAndSeconds(end_time), gameArea.canvasW / 2, gameArea.canvasH / 2 + 60);
+	context.fillText("Body Length: " + (snek.body.length - settings.start_length).toFixed(0), gameArea.canvasW / 2, gameArea.canvasH / 2 + 90);
 
 	gameStarted = false;
 	paused = false;
@@ -477,6 +487,17 @@ function gameOver()
 function intersectsWith(r1, r2)
 {
 	return !(r2.obj_x > (r1.obj_x + r1.obj_w) || (r2.obj_x + r2.obj_w) < r1.obj_x || r2.obj_y > (r1.obj_y + r1.obj_h) || (r2.obj_y + r2.obj_h) < r1.obj_y);
+}
+
+/*
+	I'm hella lazy
+	https://stackoverflow.com/a/21294619
+*/
+function millisToMinutesAndSeconds(millis) 
+{
+  var minutes = Math.floor(millis / 60000);
+  var seconds = ((millis % 60000) / 1000).toFixed(0);
+  return minutes + "m " + (seconds < 10 ? '0' : '') + seconds + "s";
 }
 
 /////////////////////////////////////////////////
